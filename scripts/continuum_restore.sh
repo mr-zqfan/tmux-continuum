@@ -10,6 +10,11 @@ auto_restore_enabled() {
 	[ "$auto_restore_value" == "on" ] && [ ! -f "$auto_restore_halt_file" ]
 }
 
+force_auto_restore_enabled() {
+	local force_auto_restore_value="$(get_tmux_option "$force_auto_restore_option" "$force_auto_restore_default")"
+	[ "$force_auto_restore_value" == "on" ]
+}
+
 fetch_and_run_tmux_resurrect_restore_script() {
 	# give tmux some time to start and source all the plugins
 	sleep 1
@@ -22,8 +27,8 @@ fetch_and_run_tmux_resurrect_restore_script() {
 main() {
 	# Advanced edge case handling: auto restore only if this is the only tmux
 	# server. If another tmux server exists, it is assumed auto-restore is not wanted.
-	# if auto_restore_enabled && ! another_tmux_server_running_on_startup; then
-	if auto_restore_enabled; then
+	# But if force auto-restore is enabled, ignore this check.
+	if auto_restore_enabled && (force_auto_restore_enabled || ! another_tmux_server_running_on_startup); then
 		fetch_and_run_tmux_resurrect_restore_script
 	fi
 }
