@@ -18,6 +18,11 @@ handle_tmux_automatic_start() {
 	"$CURRENT_DIR/scripts/handle_tmux_automatic_start.sh"
 }
 
+force_auto_save_enabled() {
+	local force_auto_save_value="$(get_tmux_option "$force_auto_save_option" "$force_auto_save_default")"
+	[ "$force_auto_save_value" == "on" ]
+}
+
 another_tmux_server_running() {
 	if just_started_tmux_server; then
 		another_tmux_server_running_on_startup
@@ -70,7 +75,8 @@ main() {
 		# Advanced edge case handling: start auto-saving only if this is the
 		# only tmux server. We don't want saved files from more environments to
 		# overwrite each other.
-		if ! another_tmux_server_running; then
+		# But if force auto save is enabled, then ignore this check.
+		if (force_auto_save_enabled || ! another_tmux_server_running); then
 			# give user a chance to restore previously saved session
 			delay_saving_environment_on_first_plugin_load
 			add_resurrect_save_interpolation
