@@ -4,12 +4,19 @@ SUPPORTED_VERSION="1.9"
 resurrect_save_path_option="@resurrect-save-script-path"
 resurrect_restore_path_option="@resurrect-restore-script-path"
 
+# force auto_save even if another tmux server is running
+force_auto_save_option="@continuum-force-save"
+force_auto_save_default="off"
+
 auto_save_interval_option="@continuum-save-interval"
 auto_save_interval_default="15"
 
 # time when the tmux environment was last saved (unix timestamp)
 last_auto_save_option="@continuum-save-last-timestamp"
 
+# force auto_restore even if another tmux server is running
+force_auto_restore_option="@continuum-force-restore"
+force_auto_restore_default="off"
 auto_restore_option="@continuum-restore"
 auto_restore_default="off"
 
